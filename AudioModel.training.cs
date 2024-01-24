@@ -14,7 +14,7 @@ namespace NeuronalesNetz
 {
     public partial class AudioModel
     {
-        public const string RetrainFilePath =  @"C:\Users\admin\source\repos\NeuronalesNetz\bin\Debug\net8.0\training_data.csv";
+        public const string RetrainFilePath =  @"C:\Users\Creme\source\repos\Cremetoertchen0815\NeuronalesNetz\bin\Debug\net8.0\training_data.csv";
         public const char RetrainSeparatorChar = ',';
         public const bool RetrainHasHeader =  true;
 
@@ -48,6 +48,7 @@ namespace NeuronalesNetz
         }
 
 
+
         /// <summary>
         /// Save a model at the specified path.
         /// </summary>
@@ -68,7 +69,7 @@ namespace NeuronalesNetz
 
 
         /// <summary>
-        /// Retrain model using the pipeline generated as part of the training process.
+        /// Retrains model using the pipeline generated as part of the training process.
         /// </summary>
         /// <param name="mlContext"></param>
         /// <param name="trainData"></param>
@@ -81,6 +82,7 @@ namespace NeuronalesNetz
             return model;
         }
 
+
         /// <summary>
         /// build the pipeline that is used from model builder. Use this function to retrain model.
         /// </summary>
@@ -92,7 +94,7 @@ namespace NeuronalesNetz
             var pipeline = mlContext.Transforms.ReplaceMissingValues(new []{new InputOutputColumnPair(@"Energy", @"Energy"),new InputOutputColumnPair(@"Rhythm", @"Rhythm"),new InputOutputColumnPair(@"Pitch", @"Pitch")})      
                                     .Append(mlContext.Transforms.Concatenate(@"Features", new []{@"Energy",@"Rhythm",@"Pitch"}))      
                                     .Append(mlContext.Transforms.Conversion.MapValueToKey(outputColumnName:@"Type",inputColumnName:@"Type",addKeyValueAnnotationsAsText:false))      
-                                    .Append(mlContext.MulticlassClassification.Trainers.OneVersusAll(binaryEstimator:mlContext.BinaryClassification.Trainers.FastForest(new FastForestBinaryTrainer.Options(){NumberOfTrees=4,NumberOfLeaves=4,FeatureFraction=1F,LabelColumnName=@"Type",FeatureColumnName=@"Features"}),labelColumnName:@"Type"))      
+                                    .Append(mlContext.MulticlassClassification.Trainers.OneVersusAll(binaryEstimator:mlContext.BinaryClassification.Trainers.FastTree(new FastTreeBinaryTrainer.Options(){NumberOfLeaves=21764,MinimumExampleCountPerLeaf=5,NumberOfTrees=4,MaximumBinCountPerFeature=1023,FeatureFraction=0.545841119485768,LearningRate=0.999999776672986,LabelColumnName=@"Type",FeatureColumnName=@"Features"}),labelColumnName: @"Type"))      
                                     .Append(mlContext.Transforms.Conversion.MapKeyToValue(outputColumnName:@"PredictedLabel",inputColumnName:@"PredictedLabel"));
 
             return pipeline;

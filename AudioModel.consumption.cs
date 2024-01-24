@@ -144,5 +144,6 @@ namespace NeuronalesNetz
             var predEngine = PredictEngine.Value;
             return predEngine.Predict(input);
         }
+
     }
 }

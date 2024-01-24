@@ -3,9 +3,9 @@
 using NeuronalesNetz;
 
 var tr = new TraingDataGenerator();
-tr.LoadDataFromFolder(Path.GetFullPath("songs/"), AudioType.MUSIC);
-tr.LoadDataFromFolder(Path.GetFullPath("speech/"), AudioType.SPEECH);
-var trainingData = tr.GetTrainingSamples(5000).Select(item => (AudioParameters.FromSample(item.data), item.type)).ToArray();
+tr.LoadDataFromFolder(Path.GetFullPath("songs/"), AudioType.MUSIC, 5000);
+tr.LoadDataFromFolder(Path.GetFullPath("speech/"), AudioType.SPEECH, 5000);
+var trainingData = tr.GetTrainingSamples(8000).Select(item => (AudioParameters.FromSample(item.data), item.type)).ToArray();
 
 var guesses = 0;
 var correctGuesses = 0;
@@ -21,7 +21,7 @@ foreach (var item in trainingData)
 
     //Load model and predict output
     var result = AudioModel.Predict(sampleData);
-    var correctGuess = (AudioType)result.Type == item.type;
+    var correctGuess = result.PredictedLabel == item.type.ToString();
     Console.WriteLine("Guess " + guesses);
     if (correctGuess) correctGuesses++;
     guesses++;
